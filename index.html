@@ -1,0 +1,1747 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lummus Engineering Hub — The Connected Workflow</title>
+
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+--navy: #0b1f3a;
+--navy2: #112843;
+--navy3: #1a3a5c;
+--green: #2eb87a;
+--green2: #23965f;
+--amber: #c47d0a;
+--red: #d0021b;
+--blue: #1a5fba;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+font-family: Arial, sans-serif;
+background: #06111f;
+min-height: 100vh;
+color: #1a2b3d;
+overflow-x: hidden;
+}
+
+/* TOP BAR */
+.top-bar {
+width: 100%; background: #0b1f3a;
+border-bottom: 3px solid #2eb87a;
+padding: 0 36px; height: 64px;
+display: flex; align-items: center; justify-content: space-between;
+position: sticky; top: 0; z-index: 500;
+}
+.brand {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 20px; font-weight: 800;
+letter-spacing: 0.08em; color: #fff; text-transform: uppercase;
+display: flex; align-items: center; gap: 10px;
+}
+.brand-hub { background: #2eb87a; color: #0b1f3a; padding: 3px 10px; font-size: 18px; letter-spacing: 0.1em; }
+.brand-sub {
+font-size: 11px; color: rgba(255,255,255,0.35);
+letter-spacing: 0.12em; font-weight: 600; text-transform: uppercase;
+border-left: 1px solid rgba(255,255,255,0.12); padding-left: 12px; margin-left: 2px;
+}
+.top-tag {
+font-size: 10px; color: rgba(255,255,255,0.3);
+letter-spacing: 0.15em; text-transform: uppercase;
+font-family: 'Arial Black', Arial, sans-serif; font-weight: 600;
+border: 1px solid rgba(255,255,255,0.1); padding: 3px 10px;
+}
+
+/* HERO */
+.hero {
+max-width: 1240px; margin: 0 auto;
+padding: 80px 36px 60px;
+text-align: center;
+}
+.hero-eyebrow {
+display: inline-flex; align-items: center; gap: 12px;
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px; font-weight: 700; letter-spacing: 0.25em;
+text-transform: uppercase; color: #2eb87a;
+margin-bottom: 24px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+content:''; display: block; width: 40px; height: 1px; background: rgba(46,184,122,0.5);
+}
+.hero-title {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: clamp(44px, 7vw, 82px);
+font-weight: 800; text-transform: uppercase;
+line-height: 0.95; letter-spacing: -0.01em;
+color: #fff; margin-bottom: 24px;
+}
+.hero-title .green { color: #2eb87a; }
+.hero-sub {
+font-size: 18px; line-height: 1.7;
+color: rgba(255,255,255,0.6);
+max-width: 740px; margin: 0 auto 40px;
+font-weight: 300;
+}
+.hero-cue {
+display: inline-flex; flex-direction: column; align-items: center; gap: 8px;
+color: rgba(255,255,255,0.3);
+font-size: 11px; letter-spacing: 0.18em;
+text-transform: uppercase; font-family: 'Arial Black', Arial, sans-serif;
+margin-top: 32px;
+}
+.hero-cue-arrow {
+width: 22px; height: 22px;
+border: 1px solid rgba(255,255,255,0.3);
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+animation: bounce 2s ease infinite;
+font-size: 11px;
+}
+@keyframes bounce {
+0%,100% { transform: translateY(0); }
+50% { transform: translateY(4px); }
+}
+
+/* STICKY PIPELINE */
+.pipeline-wrap {
+position: sticky;
+top: 64px;
+z-index: 100;
+background: rgba(11,31,58,0.92);
+backdrop-filter: blur(12px);
+-webkit-backdrop-filter: blur(12px);
+border-bottom: 1px solid rgba(46,184,122,0.15);
+padding: 18px 36px;
+transition: all 0.3s;
+}
+.pipeline {
+max-width: 1240px; margin: 0 auto;
+display: grid;
+grid-template-columns: auto 1fr auto 1fr auto 1fr auto 1fr auto 1fr auto;
+align-items: center;
+gap: 6px;
+}
+.pipe-node {
+position: relative;
+background: rgba(26,58,92,0.5);
+border: 1px solid rgba(255,255,255,0.08);
+border-radius: 4px;
+padding: 10px 12px;
+transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+min-width: 0;
+}
+.pipe-node.active {
+background: rgba(46,184,122,0.18);
+border-color: #2eb87a;
+box-shadow: 0 0 0 3px rgba(46,184,122,0.15);
+transform: translateY(-2px);
+}
+.pipe-node.done {
+background: rgba(46,184,122,0.06);
+border-color: rgba(46,184,122,0.35);
+}
+.pipe-node-top {
+display: flex; align-items: center; gap: 8px;
+margin-bottom: 2px;
+}
+.pipe-icon { font-size: 15px; flex-shrink: 0; }
+.pipe-name {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 10px; color: rgba(255,255,255,0.6);
+text-transform: uppercase; letter-spacing: 0.05em;
+line-height: 1.2;
+white-space: nowrap;
+overflow: hidden; text-overflow: ellipsis;
+}
+.pipe-node.active .pipe-name,
+.pipe-node.done .pipe-name { color: #fff; }
+.pipe-sub {
+font-size: 9px; color: rgba(255,255,255,0.3);
+letter-spacing: 0.05em;
+white-space: nowrap;
+overflow: hidden; text-overflow: ellipsis;
+}
+.pipe-node.active .pipe-sub { color: #2eb87a; }
+.pipe-arrow {
+color: rgba(255,255,255,0.2);
+font-size: 14px; font-weight: 700;
+transition: color 0.3s;
+}
+.pipe-arrow.lit { color: #2eb87a; }
+.pipe-active-indicator {
+position: absolute; top: -3px; left: 50%;
+transform: translateX(-50%);
+width: 6px; height: 6px; border-radius: 50%;
+background: #2eb87a;
+opacity: 0;
+transition: opacity 0.3s;
+box-shadow: 0 0 8px #2eb87a;
+}
+.pipe-node.active .pipe-active-indicator { opacity: 1; animation: pulse 1.5s ease infinite; }
+@keyframes pulse {
+0%,100% { transform: translateX(-50%) scale(1); opacity: 1; }
+50% { transform: translateX(-50%) scale(1.5); opacity: 0.7; }
+}
+
+/* NARRATIVE FLOW */
+.flow {
+max-width: 1100px; margin: 0 auto;
+padding: 60px 36px 120px;
+}
+.stage {
+min-height: 70vh;
+padding: 60px 0;
+display: flex; flex-direction: column; justify-content: center;
+opacity: 0.2;
+transition: opacity 0.6s ease;
+}
+.stage.in-view { opacity: 1; }
+.stage-header {
+display: flex; align-items: baseline; gap: 18px;
+margin-bottom: 18px;
+}
+.stage-num {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 14px; color: #2eb87a;
+letter-spacing: 0.2em;
+font-weight: 800;
+}
+.stage-line {
+flex: 1; height: 1px;
+background: linear-gradient(90deg, rgba(46,184,122,0.5) 0%, transparent 100%);
+}
+.stage-title {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: clamp(30px, 4vw, 44px);
+font-weight: 800; text-transform: uppercase;
+line-height: 1.05; letter-spacing: -0.01em;
+color: #fff;
+margin-bottom: 16px;
+max-width: 800px;
+}
+.stage-title .green { color: #2eb87a; }
+.stage-lead {
+font-size: 17px; line-height: 1.7;
+color: rgba(255,255,255,0.65);
+max-width: 720px;
+margin-bottom: 36px;
+font-weight: 300;
+}
+.stage-lead strong { color: #fff; font-weight: 600; }
+
+.reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.reveal.show { opacity: 1; transform: translateY(0); }
+.reveal.d1 { transition-delay: 0.1s; }
+.reveal.d2 { transition-delay: 0.2s; }
+.reveal.d3 { transition-delay: 0.3s; }
+.reveal.d4 { transition-delay: 0.4s; }
+
+/* STAGE 1 — FUSION LIVE */
+.fusion-frame {
+background: #0f1624;
+border: 1px solid rgba(255,255,255,0.08);
+border-radius: 6px;
+overflow: hidden;
+box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+.fusion-titlebar {
+background: #1a2332;
+padding: 10px 18px;
+display: flex; align-items: center; gap: 12px;
+border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.fusion-dot { width: 9px; height: 9px; border-radius: 50%; }
+.fusion-url {
+flex: 1;
+font-family: 'Courier New', monospace;
+font-size: 11px; color: rgba(255,255,255,0.4);
+text-align: center;
+background: rgba(255,255,255,0.04);
+padding: 4px 14px;
+border-radius: 3px;
+max-width: 420px;
+margin: 0 auto;
+}
+.fusion-app-bar {
+padding: 14px 22px;
+background: #101828;
+display: flex; align-items: center; justify-content: space-between;
+border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.fusion-app-name {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 14px; color: #fff; letter-spacing: 0.08em;
+display: flex; align-items: center; gap: 10px;
+}
+.fusion-logo-block {
+width: 26px; height: 26px; background: #1a5fba;
+border-radius: 3px;
+display: flex; align-items: center; justify-content: center;
+font-size: 11px; font-weight: 800;
+color: #fff;
+}
+.fusion-breadcrumb {
+font-size: 11px; color: rgba(255,255,255,0.4);
+letter-spacing: 0.05em;
+}
+.fusion-breadcrumb span { color: rgba(255,255,255,0.7); }
+.fusion-file-row {
+display: grid;
+grid-template-columns: auto 1fr auto auto auto;
+gap: 16px; align-items: center;
+padding: 16px 22px;
+border-bottom: 1px solid rgba(255,255,255,0.05);
+transition: background 0.2s;
+}
+.fusion-file-row:hover { background: rgba(255,255,255,0.02); }
+.fusion-file-row.new {
+background: rgba(46,184,122,0.06);
+border-left: 3px solid #2eb87a;
+padding-left: 19px;
+}
+.fusion-file-icon {
+width: 36px; height: 36px;
+background: #c92332;
+color: #fff;
+border-radius: 3px;
+display: flex; align-items: center; justify-content: center;
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px; font-weight: 800;
+flex-shrink: 0;
+}
+.fusion-file-info { min-width: 0; }
+.fusion-file-name {
+font-size: 13px; color: #fff; font-weight: 600;
+margin-bottom: 3px;
+}
+.fusion-file-meta {
+font-size: 11px; color: rgba(255,255,255,0.45);
+display: flex; gap: 12px;
+flex-wrap: wrap;
+}
+.fusion-rev-tag {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 10px; letter-spacing: 0.08em;
+padding: 3px 8px; border-radius: 2px;
+background: rgba(255,255,255,0.08);
+color: rgba(255,255,255,0.6);
+}
+.fusion-rev-tag.new { background: #2eb87a; color: #0b1f3a; }
+.fusion-new-badge {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 9px; letter-spacing: 0.12em;
+padding: 3px 8px; border-radius: 2px;
+background: #2eb87a; color: #0b1f3a;
+animation: newPulse 2s ease infinite;
+}
+@keyframes newPulse {
+0%,100% { box-shadow: 0 0 0 0 rgba(46,184,122,0.5); }
+50% { box-shadow: 0 0 0 6px rgba(46,184,122,0); }
+}
+.fusion-action {
+background: transparent; border: 1px solid rgba(255,255,255,0.12);
+color: rgba(255,255,255,0.5);
+padding: 6px 12px;
+font-size: 11px; font-weight: 600;
+letter-spacing: 0.06em; text-transform: uppercase;
+border-radius: 3px; cursor: pointer;
+}
+
+.hub-banner {
+margin-top: 20px;
+background: rgba(46,184,122,0.08);
+border: 1px solid rgba(46,184,122,0.3);
+border-radius: 4px;
+padding: 16px 22px;
+display: flex; align-items: center; gap: 16px;
+}
+.hub-banner-icon {
+width: 36px; height: 36px;
+background: #2eb87a; color: #0b1f3a;
+border-radius: 50%;
+display: flex; align-items: center; justify-content: center;
+font-size: 18px; flex-shrink: 0;
+}
+.hub-banner-text {
+flex: 1;
+font-size: 13px; color: rgba(255,255,255,0.85);
+line-height: 1.5;
+}
+.hub-banner-text strong { color: #2eb87a; font-weight: 700; }
+.hub-banner-status {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 10px; letter-spacing: 0.12em;
+text-transform: uppercase; color: #2eb87a;
+display: flex; align-items: center; gap: 6px;
+}
+
+/* STAGE 2 — PARSE */
+.parse-split {
+display: grid;
+grid-template-columns: 1fr auto 1fr;
+gap: 24px; align-items: center;
+}
+.parse-col { min-width: 0; }
+.parse-col-label {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px; letter-spacing: 0.15em;
+text-transform: uppercase; color: rgba(255,255,255,0.4);
+margin-bottom: 10px;
+display: flex; align-items: center; gap: 8px;
+}
+.parse-col.right .parse-col-label { color: #2eb87a; }
+.parse-doc {
+background: #fff;
+border-radius: 4px;
+padding: 20px 22px;
+box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+font-size: 11px;
+color: #1a2b3d;
+line-height: 1.7;
+}
+.parse-doc-title {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 13px; color: #0b1f3a;
+text-transform: uppercase; letter-spacing: 0.06em;
+margin-bottom: 12px;
+padding-bottom: 8px;
+border-bottom: 1px solid #dde4ec;
+}
+.parse-doc-row {
+display: grid;
+grid-template-columns: 1fr auto;
+gap: 12px;
+padding: 3px 0;
+border-bottom: 1px dashed #eef2f6;
+}
+.parse-doc-row:last-child { border-bottom: none; }
+.parse-doc-key { color: #607080; }
+.parse-doc-val { color: #1a2b3d; font-weight: 600; font-family: 'Courier New', monospace; }
+.parse-doc-val.highlight {
+background: rgba(46,184,122,0.15);
+padding: 1px 6px;
+border-radius: 2px;
+}
+
+.parse-arrow-col {
+display: flex; flex-direction: column; align-items: center;
+gap: 6px;
+}
+.parse-arrow {
+font-size: 24px; color: #2eb87a; font-weight: 800;
+}
+.parse-arrow-label {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 10px; color: #2eb87a;
+letter-spacing: 0.12em;
+text-transform: uppercase;
+text-align: center;
+line-height: 1.3;
+}
+
+.parse-struct {
+background: #112843;
+border: 1px solid rgba(46,184,122,0.25);
+border-radius: 4px;
+padding: 20px 22px;
+box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+font-family: 'Courier New', monospace;
+font-size: 12px;
+color: rgba(255,255,255,0.75);
+line-height: 1.7;
+}
+.parse-struct-head {
+color: rgba(255,255,255,0.4);
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px;
+letter-spacing: 0.08em;
+margin-bottom: 10px;
+padding-bottom: 8px;
+border-bottom: 1px solid rgba(255,255,255,0.08);
+text-transform: uppercase;
+}
+.parse-struct-line { padding: 2px 0; }
+.parse-struct-key { color: #9ecbfc; }
+.parse-struct-val { color: #2eb87a; }
+.parse-struct-comment { color: rgba(255,255,255,0.3); }
+
+.normalize-note {
+margin-top: 20px;
+background: rgba(11,31,58,0.6);
+border: 1px solid rgba(255,255,255,0.08);
+border-radius: 4px;
+padding: 16px 22px;
+display: flex; gap: 14px;
+align-items: flex-start;
+}
+.normalize-note-icon {
+font-size: 20px; flex-shrink: 0; margin-top: 2px;
+}
+.normalize-note-body { font-size: 13px; color: rgba(255,255,255,0.7); line-height: 1.6; }
+.normalize-note-body strong { color: #fff; font-weight: 600; }
+.normalize-note-body code {
+background: rgba(46,184,122,0.1);
+color: #2eb87a;
+font-family: 'Courier New', monospace;
+padding: 1px 6px;
+border-radius: 2px;
+font-size: 11px;
+}
+
+/* STAGE 3 — DIFF */
+.diff-card {
+background: #fff;
+border-radius: 4px;
+overflow: hidden;
+box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+}
+.diff-hd {
+background: #0b1f3a;
+padding: 14px 22px;
+display: flex; justify-content: space-between; align-items: center;
+color: #fff;
+}
+.diff-title {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 14px; text-transform: uppercase; letter-spacing: 0.1em;
+}
+.diff-vs {
+font-size: 11px; color: rgba(255,255,255,0.5);
+letter-spacing: 0.06em;
+font-family: 'Courier New', monospace;
+}
+.diff-vs strong { color: #fff; font-family: inherit; }
+.diff-body { padding: 8px 0; }
+.diff-row {
+display: grid;
+grid-template-columns: 200px 1fr 1fr auto;
+gap: 20px;
+padding: 12px 22px;
+align-items: center;
+border-bottom: 1px solid #eef2f6;
+}
+.diff-row:last-child { border-bottom: none; }
+.diff-row.impact {
+background: #fef0f2;
+border-left: 3px solid #d0021b;
+}
+.diff-key {
+font-size: 12px; color: #1a2b3d;
+font-weight: 700;
+}
+.diff-val {
+font-family: 'Courier New', monospace;
+font-size: 13px;
+}
+.diff-val.old {
+color: #9aa8b8;
+text-decoration: line-through;
+}
+.diff-val.new { color: #1a2b3d; font-weight: 700; }
+.diff-row.impact .diff-val.new { color: #d0021b; }
+.diff-tag {
+padding: 3px 9px;
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 9px; letter-spacing: 0.1em;
+text-transform: uppercase;
+border-radius: 2px;
+}
+.diff-tag.same { background: #eef2f6; color: #9aa8b8; }
+.diff-tag.impact { background: #fee5e8; color: #d0021b; }
+.diff-footer {
+background: #f7f9fb;
+padding: 12px 22px;
+border-top: 1px solid #dde4ec;
+font-size: 12px; color: #1a2b3d;
+}
+.diff-footer strong { color: #d0021b; }
+
+/* STAGE 4 — IMPACT */
+.dep-graph {
+background: #0f1d32;
+border: 1px solid rgba(255,255,255,0.08);
+border-radius: 6px;
+padding: 40px 32px 48px;
+box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+.dep-chain {
+display: grid;
+grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
+gap: 10px;
+align-items: center;
+margin-bottom: 24px;
+}
+.dep-box {
+background: #1a3a5c;
+border: 1px solid rgba(255,255,255,0.1);
+border-radius: 4px;
+padding: 16px 14px;
+text-align: center;
+transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.dep-box.root {
+border-color: #c47d0a;
+background: linear-gradient(180deg, rgba(196,125,10,0.15) 0%, #1a3a5c 100%);
+box-shadow: 0 0 0 3px rgba(196,125,10,0.12);
+}
+.dep-box.rippling {
+animation: ripple 1.4s ease infinite;
+border-color: #d0021b;
+background: linear-gradient(180deg, rgba(208,2,27,0.12) 0%, #1a3a5c 100%);
+}
+@keyframes ripple {
+0%,100% { box-shadow: 0 0 0 0 rgba(208,2,27,0.35); }
+50% { box-shadow: 0 0 0 8px rgba(208,2,27,0); }
+}
+.dep-box-icon { font-size: 20px; margin-bottom: 6px; }
+.dep-box-name {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 10px; color: #fff;
+text-transform: uppercase; letter-spacing: 0.04em;
+line-height: 1.3;
+margin-bottom: 4px;
+}
+.dep-box-val {
+font-size: 11px; color: rgba(255,255,255,0.55);
+font-family: 'Courier New', monospace;
+}
+.dep-box.root .dep-box-val { color: #c47d0a; font-weight: 700; }
+.dep-box.rippling .dep-box-val { color: #ff8a8a; font-weight: 700; }
+.dep-flow-arrow {
+color: #c47d0a;
+font-size: 18px; font-weight: 800;
+text-align: center;
+animation: flow 1.5s ease-in-out infinite;
+}
+@keyframes flow {
+0% { transform: translateX(-4px); opacity: 0.4; }
+50% { transform: translateX(2px); opacity: 1; }
+100% { transform: translateX(-4px); opacity: 0.4; }
+}
+
+.impact-panel {
+border-top: 1px solid rgba(255,255,255,0.06);
+padding-top: 22px;
+margin-top: 22px;
+}
+.impact-panel-label {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px; letter-spacing: 0.15em;
+text-transform: uppercase; color: rgba(255,255,255,0.45);
+margin-bottom: 16px;
+display: flex; align-items: center; gap: 10px;
+}
+.impact-panel-label::before {
+content: ''; width: 20px; height: 1px; background: rgba(255,255,255,0.25);
+}
+.impact-grid {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 12px;
+}
+.impact-pill-card {
+background: rgba(26,58,92,0.6);
+border: 1px solid rgba(255,255,255,0.08);
+border-radius: 4px;
+padding: 14px 16px;
+display: flex; align-items: center; gap: 12px;
+}
+.impact-pill-card.critical {
+border-left: 3px solid #d0021b;
+background: linear-gradient(90deg, rgba(208,2,27,0.08) 0%, rgba(26,58,92,0.6) 40%);
+}
+.impact-pill-card.review {
+border-left: 3px solid #c47d0a;
+background: linear-gradient(90deg, rgba(196,125,10,0.08) 0%, rgba(26,58,92,0.6) 40%);
+}
+.impact-pill-card.info {
+border-left: 3px solid #1a5fba;
+background: linear-gradient(90deg, rgba(26,95,186,0.08) 0%, rgba(26,58,92,0.6) 40%);
+}
+.impact-pill-icon {
+font-size: 20px; flex-shrink: 0;
+}
+.impact-pill-body { flex: 1; min-width: 0; }
+.impact-pill-title {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 12px; color: #fff;
+text-transform: uppercase; letter-spacing: 0.04em;
+margin-bottom: 3px;
+}
+.impact-pill-sub {
+font-size: 11px; color: rgba(255,255,255,0.55);
+line-height: 1.4;
+}
+.impact-pill-badge {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 9px; letter-spacing: 0.1em;
+text-transform: uppercase;
+padding: 3px 8px; border-radius: 2px;
+flex-shrink: 0;
+}
+.impact-pill-card.critical .impact-pill-badge { background: #d0021b; color: #fff; }
+.impact-pill-card.review .impact-pill-badge { background: #c47d0a; color: #fff; }
+.impact-pill-card.info .impact-pill-badge { background: #1a5fba; color: #fff; }
+
+/* STAGE 5 — INSIGHT */
+.insight-stack { display: flex; flex-direction: column; gap: 14px; }
+.insight-block {
+background: #112843;
+border-left: 3px solid #2eb87a;
+border-radius: 0 4px 4px 0;
+padding: 20px 24px;
+}
+.insight-block-label {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 10px; letter-spacing: 0.15em;
+text-transform: uppercase; color: #2eb87a;
+margin-bottom: 10px;
+display: flex; align-items: center; gap: 10px;
+}
+.insight-block-body {
+font-size: 14px; color: rgba(255,255,255,0.85);
+line-height: 1.7;
+}
+.insight-block-body strong { color: #fff; font-weight: 700; }
+.insight-block-body .danger { color: #ff8a8a; font-weight: 600; }
+.insight-block-body .hl { color: #2eb87a; font-weight: 600; }
+.insight-recommendation {
+background: rgba(46,184,122,0.1);
+border: 1px solid rgba(46,184,122,0.3);
+border-radius: 4px;
+padding: 20px 24px;
+margin-top: 14px;
+}
+.insight-rec-label {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px; letter-spacing: 0.15em;
+text-transform: uppercase; color: #2eb87a;
+margin-bottom: 12px;
+}
+.insight-rec-list {
+list-style: none;
+}
+.insight-rec-list li {
+padding: 6px 0 6px 22px;
+position: relative;
+font-size: 14px;
+color: rgba(255,255,255,0.85);
+line-height: 1.6;
+}
+.insight-rec-list li::before {
+content: '→';
+position: absolute; left: 0; top: 6px;
+color: #2eb87a; font-weight: 800;
+}
+.insight-rec-list strong { color: #fff; }
+
+/* STAGE 6 — DECISION */
+.decision-wrap {
+background: linear-gradient(135deg, rgba(46,184,122,0.06) 0%, rgba(11,31,58,0.8) 60%);
+border: 1px solid rgba(46,184,122,0.25);
+border-radius: 6px;
+padding: 36px 40px;
+box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+.decision-label {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px; letter-spacing: 0.18em;
+text-transform: uppercase; color: #2eb87a;
+margin-bottom: 12px;
+}
+.decision-q {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 26px; color: #fff;
+text-transform: uppercase; letter-spacing: 0.02em;
+line-height: 1.15;
+margin-bottom: 16px;
+}
+.decision-context {
+font-size: 14px; color: rgba(255,255,255,0.6);
+line-height: 1.6;
+margin-bottom: 28px;
+max-width: 640px;
+}
+.decision-options {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 14px;
+margin-bottom: 20px;
+}
+.decision-option {
+background: rgba(26,58,92,0.6);
+border: 1px solid rgba(255,255,255,0.1);
+border-radius: 4px;
+padding: 20px 22px;
+cursor: pointer;
+transition: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+position: relative;
+overflow: hidden;
+}
+.decision-option::before {
+content: ''; position: absolute;
+top: 0; left: 0; right: 0; height: 2px;
+background: #2eb87a;
+transform: scaleX(0); transform-origin: left;
+transition: transform 0.35s;
+}
+.decision-option:hover {
+background: rgba(46,184,122,0.08);
+border-color: rgba(46,184,122,0.3);
+transform: translateY(-2px);
+}
+.decision-option:hover::before { transform: scaleX(1); }
+.decision-option.recommended {
+background: rgba(46,184,122,0.1);
+border-color: rgba(46,184,122,0.45);
+}
+.decision-option.recommended::before { transform: scaleX(1); }
+.decision-option.selected {
+background: rgba(46,184,122,0.18);
+border-color: #2eb87a;
+box-shadow: 0 0 0 3px rgba(46,184,122,0.15);
+}
+.decision-option-tag {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 9px; letter-spacing: 0.14em;
+text-transform: uppercase;
+padding: 3px 9px;
+background: #2eb87a; color: #0b1f3a;
+border-radius: 2px;
+display: inline-block;
+margin-bottom: 10px;
+}
+.decision-option-title {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 16px; color: #fff;
+text-transform: uppercase;
+letter-spacing: 0.02em;
+margin-bottom: 8px;
+}
+.decision-option-sub {
+font-size: 12px; color: rgba(255,255,255,0.55);
+line-height: 1.55;
+margin-bottom: 10px;
+}
+.decision-option-stats {
+display: flex; gap: 14px;
+padding-top: 10px;
+border-top: 1px solid rgba(255,255,255,0.08);
+font-size: 11px;
+color: rgba(255,255,255,0.5);
+flex-wrap: wrap;
+}
+.decision-option-stat strong { color: #fff; }
+
+.decision-cta {
+display: flex; justify-content: flex-end; gap: 10px;
+padding-top: 20px;
+border-top: 1px solid rgba(255,255,255,0.08);
+flex-wrap: wrap;
+}
+.decision-btn {
+padding: 12px 22px;
+font-family: Arial, sans-serif;
+font-size: 13px; font-weight: 700;
+letter-spacing: 0.06em; text-transform: uppercase;
+border-radius: 3px; cursor: pointer;
+border: none;
+transition: all 0.2s;
+}
+.decision-btn.primary { background: #2eb87a; color: #0b1f3a; }
+.decision-btn.primary:hover { background: #23965f; transform: translateY(-1px); }
+.decision-btn.primary:disabled {
+background: rgba(255,255,255,0.08);
+color: rgba(255,255,255,0.3);
+cursor: not-allowed;
+}
+.decision-btn.ghost {
+background: transparent; color: rgba(255,255,255,0.5);
+border: 1px solid rgba(255,255,255,0.15);
+}
+
+/* STAGE 7 — PROPAGATION */
+.propagate-wrap {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 16px;
+}
+.prop-card {
+background: #fff;
+border-radius: 4px;
+overflow: hidden;
+box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+transition: transform 0.4s;
+}
+.prop-card:hover { transform: translateY(-2px); }
+.prop-hd {
+background: #0b1f3a;
+padding: 12px 18px;
+color: #fff;
+display: flex; justify-content: space-between; align-items: center;
+}
+.prop-hd-title {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 13px; text-transform: uppercase;
+letter-spacing: 0.08em;
+}
+.prop-hd-badge {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 9px; letter-spacing: 0.1em;
+padding: 3px 8px; border-radius: 2px;
+background: #2eb87a; color: #0b1f3a;
+}
+
+.calc-panel { padding: 18px 22px; }
+.calc-row {
+display: grid;
+grid-template-columns: 1fr auto auto;
+gap: 14px;
+align-items: center;
+padding: 10px 0;
+border-bottom: 1px solid #eef2f6;
+font-size: 13px;
+}
+.calc-row:last-child { border-bottom: none; }
+.calc-row-name { color: #1a2b3d; font-weight: 600; }
+.calc-row-val {
+font-family: 'Courier New', monospace;
+color: #1a2b3d; font-weight: 700;
+}
+.calc-row-status {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 9px; letter-spacing: 0.1em;
+padding: 3px 8px; border-radius: 2px;
+text-transform: uppercase;
+}
+.calc-row-status.pass { background: #d4f5e7; color: #1a6644; }
+
+.drawing-panel { padding: 18px 22px; }
+.drawing-svg-frame {
+background: #f7f9fb;
+border: 1px solid #dde4ec;
+border-radius: 3px;
+padding: 14px;
+position: relative;
+}
+.drawing-svg-frame::before {
+content: 'TS-GA-001 · Rev D';
+position: absolute;
+top: 6px; right: 10px;
+font-family: 'Courier New', monospace;
+font-size: 9px; color: #9aa8b8;
+letter-spacing: 0.05em;
+}
+.drawing-legend {
+margin-top: 10px;
+display: flex; justify-content: space-between;
+padding: 8px 10px;
+background: #f7f9fb;
+border-radius: 3px;
+font-size: 12px; color: #607080;
+}
+.drawing-legend strong { color: #2eb87a; }
+
+.prop-summary {
+background: linear-gradient(135deg, rgba(46,184,122,0.08) 0%, rgba(11,31,58,0.6) 70%);
+border: 1px solid rgba(46,184,122,0.25);
+border-radius: 4px;
+padding: 24px 28px;
+margin-top: 20px;
+}
+.prop-summary-label {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px; letter-spacing: 0.15em;
+text-transform: uppercase; color: #2eb87a;
+margin-bottom: 14px;
+}
+.prop-summary-list {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 2px;
+background: rgba(255,255,255,0.05);
+border-radius: 4px;
+overflow: hidden;
+}
+.prop-summary-item {
+background: #112843;
+padding: 16px 18px;
+}
+.prop-summary-check {
+font-size: 16px; color: #2eb87a;
+margin-bottom: 6px;
+}
+.prop-summary-item-title {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px; color: #fff;
+text-transform: uppercase; letter-spacing: 0.04em;
+margin-bottom: 3px;
+}
+.prop-summary-item-sub {
+font-size: 11px; color: rgba(255,255,255,0.55);
+line-height: 1.5;
+}
+
+/* CLOSING */
+.closing {
+max-width: 900px; margin: 0 auto;
+padding: 60px 36px 80px;
+text-align: center;
+}
+.closing-eyebrow {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 11px; letter-spacing: 0.2em;
+text-transform: uppercase; color: #2eb87a;
+margin-bottom: 20px;
+}
+.closing-title {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: clamp(32px, 5vw, 54px);
+font-weight: 800; text-transform: uppercase;
+line-height: 1.05; letter-spacing: -0.01em;
+color: #fff;
+margin-bottom: 24px;
+}
+.closing-title .green { color: #2eb87a; }
+.closing-stats {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 2px;
+background: rgba(255,255,255,0.05);
+border-radius: 4px;
+overflow: hidden;
+margin: 40px 0 32px;
+}
+.closing-stat {
+background: #0f1d32;
+padding: 24px 18px;
+}
+.closing-stat-num {
+font-family: 'Arial Black', Arial, sans-serif;
+font-size: 32px; color: #2eb87a;
+margin-bottom: 4px;
+line-height: 1;
+}
+.closing-stat-label {
+font-size: 10px; letter-spacing: 0.12em;
+text-transform: uppercase; color: rgba(255,255,255,0.5);
+font-family: 'Arial Black', Arial, sans-serif;
+font-weight: 700;
+}
+.closing-text {
+font-size: 16px; color: rgba(255,255,255,0.7);
+line-height: 1.75;
+max-width: 700px; margin: 0 auto;
+font-style: italic;
+}
+.closing-text strong { color: #fff; font-style: normal; font-weight: 700; }
+.closing-text .green { color: #2eb87a; font-style: normal; font-weight: 700; }
+
+/* RESPONSIVE */
+@media (max-width: 960px) {
+.pipeline { grid-template-columns: 1fr; gap: 4px; }
+.pipeline .pipe-arrow { display: none; }
+.pipe-name { white-space: normal; }
+.parse-split { grid-template-columns: 1fr; }
+.parse-arrow-col { transform: rotate(90deg); padding: 16px 0; }
+.diff-row { grid-template-columns: 1fr; gap: 4px; padding: 14px 18px; }
+.impact-grid { grid-template-columns: 1fr; }
+.dep-chain { grid-template-columns: 1fr; gap: 8px; }
+.dep-flow-arrow { transform: rotate(90deg); }
+.decision-options { grid-template-columns: 1fr; }
+.propagate-wrap { grid-template-columns: 1fr; }
+.prop-summary-list { grid-template-columns: 1fr 1fr; }
+.closing-stats { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+.hero { padding: 50px 22px 40px; }
+.flow { padding: 40px 22px 80px; }
+.stage { min-height: auto; padding: 40px 0; }
+.top-bar { padding: 0 18px; }
+.brand-sub { display: none; }
+}
+</style>
+
+</head>
+<body>
+
+<!-- TOP BAR -->
+
+<div class="top-bar">
+<div class="brand">
+Lummus <div class="brand-hub">Engineering Hub</div>
+<div class="brand-sub">From Documents to Decisions</div>
+</div>
+<div class="top-tag">Interactive Demo</div>
+</div>
+
+<!-- HERO -->
+
+<div class="hero">
+<div class="hero-eyebrow">The Connected Engineering Workflow</div>
+<h1 class="hero-title">
+One change.<br>
+<span class="green">Every consequence.</span>
+</h1>
+<p class="hero-sub">
+Watch a single parameter change ripple through the engineering stack — from a new datasheet revision in Fusion Live to an automatically updated AutoCAD drawing. No manual diffs. No missed impacts. No drawings redrawn by hand.
+</p>
+<div class="hero-cue">
+<span>Scroll to begin</span>
+<div class="hero-cue-arrow">↓</div>
+</div>
+</div>
+
+<!-- STICKY PIPELINE -->
+
+<div class="pipeline-wrap">
+<div class="pipeline" id="pipeline">
+<div class="pipe-node" data-stage="1">
+<div class="pipe-active-indicator"></div>
+<div class="pipe-node-top"><div class="pipe-icon">📂</div><div class="pipe-name">Fusion Live</div></div>
+<div class="pipe-sub">Source of truth</div>
+</div>
+<div class="pipe-arrow" data-arrow="1">→</div>
+<div class="pipe-node" data-stage="2">
+<div class="pipe-active-indicator"></div>
+<div class="pipe-node-top"><div class="pipe-icon">⚙️</div><div class="pipe-name">Parse &amp; Normalize</div></div>
+<div class="pipe-sub">Structured data</div>
+</div>
+<div class="pipe-arrow" data-arrow="2">→</div>
+<div class="pipe-node" data-stage="3">
+<div class="pipe-active-indicator"></div>
+<div class="pipe-node-top"><div class="pipe-icon">🔄</div><div class="pipe-name">Revision Diff</div></div>
+<div class="pipe-sub">What changed</div>
+</div>
+<div class="pipe-arrow" data-arrow="3">→</div>
+<div class="pipe-node" data-stage="4">
+<div class="pipe-active-indicator"></div>
+<div class="pipe-node-top"><div class="pipe-icon">🧬</div><div class="pipe-name">Impact Map</div></div>
+<div class="pipe-sub">Downstream effect</div>
+</div>
+<div class="pipe-arrow" data-arrow="4">→</div>
+<div class="pipe-node" data-stage="5">
+<div class="pipe-active-indicator"></div>
+<div class="pipe-node-top"><div class="pipe-icon">🧠</div><div class="pipe-name">AI Insight</div></div>
+<div class="pipe-sub">Interpret &amp; recommend</div>
+</div>
+<div class="pipe-arrow" data-arrow="5">→</div>
+<div class="pipe-node" data-stage="7">
+<div class="pipe-active-indicator"></div>
+<div class="pipe-node-top"><div class="pipe-icon">📐</div><div class="pipe-name">AutoCAD</div></div>
+<div class="pipe-sub">Surgical update</div>
+</div>
+</div>
+</div>
+
+<!-- FLOW -->
+
+<div class="flow">
+
+<!-- STAGE 1 -->
+
+<section class="stage" id="stage-1" data-pipe="1">
+<div class="stage-header reveal">
+<div class="stage-num">STAGE 01</div>
+<div class="stage-line"></div>
+</div>
+<h2 class="stage-title reveal d1">A new revision<br>lands in <span class="green">Fusion Live.</span></h2>
+<p class="stage-lead reveal d2">
+Steve uploads <strong>TS-DS-Rev-D</strong> — the latest version of the Tube Supports datasheet for the SRT VI heater project. In today's world, this would sit in a folder until someone thinks to look. The Hub is watching.
+</p>
+
+```
+<div class="reveal d3">
+<div class="fusion-frame">
+<div class="fusion-titlebar">
+<div class="fusion-dot" style="background:#ff5f57"></div>
+<div class="fusion-dot" style="background:#febc2e"></div>
+<div class="fusion-dot" style="background:#28c840"></div>
+<div class="fusion-url">fusionlive.lummus.com/projects/SRT-VI-AR/tube-supports</div>
+</div>
+<div class="fusion-app-bar">
+<div class="fusion-app-name">
+<div class="fusion-logo-block">FL</div>
+Fusion Live
+</div>
+<div class="fusion-breadcrumb">
+Projects / <span>SRT VI · Aramco</span> / Datasheets / Tube Supports
+</div>
+</div>
+
+<div class="fusion-file-row new">
+<div class="fusion-file-icon">PDF</div>
+<div class="fusion-file-info">
+<div class="fusion-file-name">TS-DS-Rev-D.pdf</div>
+<div class="fusion-file-meta">
+<span>2.4 MB</span>
+<span>Uploaded by Steve Barker</span>
+<span>2 minutes ago</span>
+</div>
+</div>
+<div class="fusion-rev-tag new">REV D</div>
+<div class="fusion-new-badge">NEW</div>
+<button class="fusion-action">Open</button>
+</div>
+
+<div class="fusion-file-row">
+<div class="fusion-file-icon">PDF</div>
+<div class="fusion-file-info">
+<div class="fusion-file-name">TS-DS-Rev-C.pdf</div>
+<div class="fusion-file-meta">
+<span>2.3 MB</span>
+<span>Richard Owens</span>
+<span>5 days ago</span>
+</div>
+</div>
+<div class="fusion-rev-tag">REV C</div>
+<div></div>
+<button class="fusion-action">Open</button>
+</div>
+
+<div class="fusion-file-row">
+<div class="fusion-file-icon">PDF</div>
+<div class="fusion-file-info">
+<div class="fusion-file-name">TS-DS-Rev-B.pdf</div>
+<div class="fusion-file-meta">
+<span>2.2 MB</span>
+<span>Richard Owens</span>
+<span>12 days ago</span>
+</div>
+</div>
+<div class="fusion-rev-tag">REV B</div>
+<div></div>
+<button class="fusion-action">Open</button>
+</div>
+</div>
+
+<div class="hub-banner">
+<div class="hub-banner-icon">⚡</div>
+<div class="hub-banner-text">
+<strong>Engineering Hub</strong> detected a new revision. Starting document classification and parameter extraction…
+</div>
+<div class="hub-banner-status">
+<span style="display:inline-block; width:7px; height:7px; border-radius:50%; background:#2eb87a; animation: newPulse 1.2s infinite;"></span>
+Processing
+</div>
+</div>
+</div>
+```
+
+</section>
+
+<!-- STAGE 2 -->
+
+<section class="stage" id="stage-2" data-pipe="2">
+<div class="stage-header reveal">
+<div class="stage-num">STAGE 02</div>
+<div class="stage-line"></div>
+</div>
+<h2 class="stage-title reveal d1">From PDF,<br>to <span class="green">structured data.</span></h2>
+<p class="stage-lead reveal d2">
+The Hub classifies the document as a tube supports datasheet, applies the matching parser, and maps every field to a canonical parameter — so <strong>"Wall Thk."</strong>, <strong>"wall_thickness"</strong>, and <strong>"t_wall"</strong> all become the same thing: a first-class data point the rest of the system can reason about.
+</p>
+
+```
+<div class="parse-split reveal d3">
+<div class="parse-col">
+<div class="parse-col-label"><span>📄</span> Raw datasheet · Rev D</div>
+<div class="parse-doc">
+<div class="parse-doc-title">Tube Supports Datasheet</div>
+<div class="parse-doc-row"><span class="parse-doc-key">Project</span><span class="parse-doc-val">SRT VI · Aramco</span></div>
+<div class="parse-doc-row"><span class="parse-doc-key">Tube O.D.</span><span class="parse-doc-val">2.375 in</span></div>
+<div class="parse-doc-row"><span class="parse-doc-key">Wall Thk.</span><span class="parse-doc-val highlight">0.180 in</span></div>
+<div class="parse-doc-row"><span class="parse-doc-key">Material</span><span class="parse-doc-val">A213 T22</span></div>
+<div class="parse-doc-row"><span class="parse-doc-key">Design Temp.</span><span class="parse-doc-val">1650 °F</span></div>
+<div class="parse-doc-row"><span class="parse-doc-key">Corrosion Allow.</span><span class="parse-doc-val">0.125 in</span></div>
+<div class="parse-doc-row"><span class="parse-doc-key">Support Spacing</span><span class="parse-doc-val">6.0 ft</span></div>
+</div>
+</div>
+
+<div class="parse-arrow-col">
+<div class="parse-arrow">→</div>
+<div class="parse-arrow-label">Parse<br>+ Normalize</div>
+</div>
+
+<div class="parse-col right">
+<div class="parse-col-label"><span>⚙️</span> Canonical parameters</div>
+<div class="parse-struct">
+<div class="parse-struct-head">tube_supports · rev_d</div>
+<div class="parse-struct-line"><span class="parse-struct-key">project_id</span>: <span class="parse-struct-val">"SRT-VI-AR"</span></div>
+<div class="parse-struct-line"><span class="parse-struct-key">tube_od</span>: <span class="parse-struct-val">2.375</span> <span class="parse-struct-comment">// in</span></div>
+<div class="parse-struct-line"><span class="parse-struct-key">wall_thickness</span>: <span class="parse-struct-val">0.180</span> <span class="parse-struct-comment">// in (was 0.220)</span></div>
+<div class="parse-struct-line"><span class="parse-struct-key">material_spec</span>: <span class="parse-struct-val">"A213-T22"</span></div>
+<div class="parse-struct-line"><span class="parse-struct-key">design_temp</span>: <span class="parse-struct-val">1650</span> <span class="parse-struct-comment">// °F</span></div>
+<div class="parse-struct-line"><span class="parse-struct-key">corrosion_allow</span>: <span class="parse-struct-val">0.125</span> <span class="parse-struct-comment">// in</span></div>
+<div class="parse-struct-line"><span class="parse-struct-key">support_spacing</span>: <span class="parse-struct-val">6.0</span> <span class="parse-struct-comment">// ft</span></div>
+<div class="parse-struct-line"><span class="parse-struct-key">source_doc</span>: <span class="parse-struct-val">"TS-DS-Rev-D"</span></div>
+<div class="parse-struct-line"><span class="parse-struct-key">confidence</span>: <span class="parse-struct-val">0.98</span></div>
+</div>
+</div>
+</div>
+
+<div class="normalize-note reveal d4">
+<div class="normalize-note-icon">🧩</div>
+<div class="normalize-note-body">
+<strong>This is the critical layer.</strong> Without normalization, every downstream system needs to know every possible spelling of every parameter. With it, the system speaks one language — and can reason across datasheets, client specs, calculators, and drawings. A field like <code>wall_thickness</code> is the same thing everywhere.
+</div>
+</div>
+```
+
+</section>
+
+<!-- STAGE 3 -->
+
+<section class="stage" id="stage-3" data-pipe="3">
+<div class="stage-header reveal">
+<div class="stage-num">STAGE 03</div>
+<div class="stage-line"></div>
+</div>
+<h2 class="stage-title reveal d1">The Hub spots<br>what <span class="green">actually changed.</span></h2>
+<p class="stage-lead reveal d2">
+With both revisions now as structured data, the diff is trivial — and meaningful. The Hub surfaces exactly one parameter difference between Rev C and Rev D, tagged with downstream impact. No engineer had to compare PDFs side by side.
+</p>
+
+```
+<div class="reveal d3">
+<div class="diff-card">
+<div class="diff-hd">
+<div class="diff-title">📊 Parameter Delta</div>
+<div class="diff-vs"><strong>Rev C</strong> → <strong>Rev D</strong> · auto-generated</div>
+</div>
+<div class="diff-body">
+<div class="diff-row impact">
+<div class="diff-key">Wall Thickness</div>
+<div class="diff-val old">0.220 in</div>
+<div class="diff-val new">0.180 in</div>
+<div class="diff-tag impact">⚠ Impact</div>
+</div>
+<div class="diff-row">
+<div class="diff-key">Tube Outer Diameter</div>
+<div class="diff-val new">2.375 in</div>
+<div class="diff-val new">2.375 in</div>
+<div class="diff-tag same">Same</div>
+</div>
+<div class="diff-row">
+<div class="diff-key">Material</div>
+<div class="diff-val new">A213 T22</div>
+<div class="diff-val new">A213 T22</div>
+<div class="diff-tag same">Same</div>
+</div>
+<div class="diff-row">
+<div class="diff-key">Design Temperature</div>
+<div class="diff-val new">1650 °F</div>
+<div class="diff-val new">1650 °F</div>
+<div class="diff-tag same">Same</div>
+</div>
+<div class="diff-row">
+<div class="diff-key">Support Spacing</div>
+<div class="diff-val new">6.0 ft</div>
+<div class="diff-val new">6.0 ft</div>
+<div class="diff-tag same">Same</div>
+</div>
+</div>
+<div class="diff-footer">
+<strong>1 parameter changed</strong> — Wall Thickness reduced by 18% · flagged for downstream impact analysis.
+</div>
+</div>
+</div>
+```
+
+</section>
+
+<!-- STAGE 4 -->
+
+<section class="stage" id="stage-4" data-pipe="4">
+<div class="stage-header reveal">
+<div class="stage-num">STAGE 04</div>
+<div class="stage-line"></div>
+</div>
+<h2 class="stage-title reveal d1">The change<br><span class="green">ripples through.</span></h2>
+<p class="stage-lead reveal d2">
+The Hub maintains an explicit dependency graph — every parameter, every calculation, every drawing entity it touches. One change propagates along every relevant edge, flagging exactly which systems are affected and how critical each impact is.
+</p>
+
+```
+<div class="reveal d3">
+<div class="dep-graph">
+<div class="dep-chain">
+<div class="dep-box root">
+<div class="dep-box-icon">📝</div>
+<div class="dep-box-name">Wall Thickness</div>
+<div class="dep-box-val">0.180 in ⚠</div>
+</div>
+<div class="dep-flow-arrow">→</div>
+<div class="dep-box rippling">
+<div class="dep-box-icon">🧮</div>
+<div class="dep-box-name">Stress Calc</div>
+<div class="dep-box-val">21.2 ksi ✗</div>
+</div>
+<div class="dep-flow-arrow">→</div>
+<div class="dep-box rippling">
+<div class="dep-box-icon">📏</div>
+<div class="dep-box-name">Support Spacing</div>
+<div class="dep-box-val">Review</div>
+</div>
+<div class="dep-flow-arrow">→</div>
+<div class="dep-box">
+<div class="dep-box-icon">📐</div>
+<div class="dep-box-name">GA Drawing</div>
+<div class="dep-box-val">TS-GA-001</div>
+</div>
+</div>
+
+<div class="impact-panel">
+<div class="impact-panel-label">4 downstream systems flagged</div>
+<div class="impact-grid">
+<div class="impact-pill-card critical">
+<div class="impact-pill-icon">🧮</div>
+<div class="impact-pill-body">
+<div class="impact-pill-title">Tube Stress Calculations</div>
+<div class="impact-pill-sub">Allowable stress exceeded at 1650°F</div>
+</div>
+<div class="impact-pill-badge">Critical</div>
+</div>
+<div class="impact-pill-card review">
+<div class="impact-pill-icon">📏</div>
+<div class="impact-pill-body">
+<div class="impact-pill-title">Support Spacing</div>
+<div class="impact-pill-sub">6.0 ft may no longer meet deflection limits</div>
+</div>
+<div class="impact-pill-badge">Review</div>
+</div>
+<div class="impact-pill-card review">
+<div class="impact-pill-icon">⚖️</div>
+<div class="impact-pill-body">
+<div class="impact-pill-title">Allowable Load Limits</div>
+<div class="impact-pill-sub">Section modulus reduced by 16%</div>
+</div>
+<div class="impact-pill-badge">Review</div>
+</div>
+<div class="impact-pill-card info">
+<div class="impact-pill-icon">📐</div>
+<div class="impact-pill-body">
+<div class="impact-pill-title">GA Drawing TS-GA-001</div>
+<div class="impact-pill-sub">References wall thickness and spacing</div>
+</div>
+<div class="impact-pill-badge">Info</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+```
+
+</section>
+
+<!-- STAGE 5 -->
+
+<section class="stage" id="stage-5" data-pipe="5">
+<div class="stage-header reveal">
+<div class="stage-num">STAGE 05</div>
+<div class="stage-line"></div>
+</div>
+<h2 class="stage-title reveal d1">Flagging isn't<br>the same as <span class="green">understanding.</span></h2>
+<p class="stage-lead reveal d2">
+Detection tells you <em>what</em> changed. AI tells you what it <em>means</em> — drawing on codes, calculation methods, and historical Lummus projects. Not a chatbot. Embedded engineering judgement that reads the graph, interprets it, and recommends the right next move.
+</p>
+
+```
+<div class="insight-stack reveal d3">
+<div class="insight-block">
+<div class="insight-block-label"><span>⚠️</span> Validation · Stress Analysis</div>
+<div class="insight-block-body">
+Reduced wall thickness increases tube stress by <span class="danger">approximately 18%</span>, bringing projected stress to <span class="danger">21.2 ksi</span> — <strong>above the allowable limit</strong> of 20 ksi at the current design temperature of 1650°F.
+</div>
+</div>
+
+<div class="insight-block">
+<div class="insight-block-label"><span>📚</span> Historical Reference · 3 similar projects</div>
+<div class="insight-block-body">
+<strong>SRT IV (Shell Pernis, 2021)</strong> and <strong>SRT V (ExxonMobil Baytown, 2023)</strong> both hit this same tradeoff. In each case, engineering teams resolved with <span class="hl">reduced support spacing</span> rather than upgraded tube material — avoiding ~$34k per heater in material costs.
+</div>
+</div>
+
+<div class="insight-recommendation">
+<div class="insight-rec-label">💡 Recommended path forward</div>
+<ul class="insight-rec-list">
+<li><strong>Option A — Reduce support spacing from 6.0 ft to 4.5 ft.</strong> Keeps current material, brings stress within allowable. <em>Lowest cost.</em></li>
+<li><strong>Option B — Upgrade tube material to A213 T91.</strong> Higher allowable stress at temperature. <em>Keeps current geometry.</em></li>
+</ul>
+</div>
+</div>
+```
+
+</section>
+
+<!-- STAGE 6 -->
+
+<section class="stage" id="stage-6" data-pipe="5">
+<div class="stage-header reveal">
+<div class="stage-num">STAGE 06</div>
+<div class="stage-line"></div>
+</div>
+<h2 class="stage-title reveal d1">The AI recommends.<br><span class="green">You decide.</span></h2>
+<p class="stage-lead reveal d2">
+The Hub never takes the final call. It brings you to the decision point with full context, side-by-side tradeoffs, and its recommendation — but the engineer chooses. <strong>This is the only moment in the flow where a human is required.</strong>
+</p>
+
+```
+<div class="reveal d3">
+<div class="decision-wrap">
+<div class="decision-label">Your call, James</div>
+<div class="decision-q">Which path brings stress within allowable?</div>
+<div class="decision-context">
+Both options resolve the critical impact. Pick one and the Hub will recalculate, update the affected drawings, and log the decision against the revision.
+</div>
+
+<div class="decision-options" id="decisionOptions">
+<div class="decision-option recommended" onclick="pickOption(this, 'A')">
+<div class="decision-option-tag">★ Recommended</div>
+<div class="decision-option-title">A — Tighten spacing</div>
+<div class="decision-option-sub">
+Reduce support spacing from 6.0 ft to 4.5 ft. Keeps current material (A213 T22).
+</div>
+<div class="decision-option-stats">
+<div class="decision-option-stat">Cost impact: <strong>~$34k savings</strong></div>
+<div class="decision-option-stat">Drawings affected: <strong>2</strong></div>
+</div>
+</div>
+<div class="decision-option" onclick="pickOption(this, 'B')">
+<div class="decision-option-title">B — Upgrade material</div>
+<div class="decision-option-sub">
+Switch tube material to A213 T91 (higher allowable stress at temperature).
+</div>
+<div class="decision-option-stats">
+<div class="decision-option-stat">Cost impact: <strong>+$34k / heater</strong></div>
+<div class="decision-option-stat">Drawings affected: <strong>5</strong></div>
+</div>
+</div>
+</div>
+
+<div class="decision-cta">
+<button class="decision-btn ghost">Ask Hub for more context</button>
+<button class="decision-btn primary" id="decisionBtn" disabled onclick="confirmDecision()">Apply &amp; Propagate</button>
+</div>
+</div>
+</div>
+```
+
+</section>
+
+<!-- STAGE 7 -->
+
+<section class="stage" id="stage-7" data-pipe="7">
+<div class="stage-header reveal">
+<div class="stage-num">STAGE 07</div>
+<div class="stage-line"></div>
+</div>
+<h2 class="stage-title reveal d1">Everything downstream<br><span class="green">updates itself.</span></h2>
+<p class="stage-lead reveal d2">
+Calculations rerun with the new spacing. The GA drawing gets a surgical update — only the dimensions, support markers, and annotations that changed. Engineer edits, custom annotations, and revision history all preserved. No drawing was regenerated from scratch.
+</p>
+
+```
+<div class="propagate-wrap reveal d3">
+<div class="prop-card">
+<div class="prop-hd">
+<div class="prop-hd-title">🧮 Calculations · Recomputed</div>
+<div class="prop-hd-badge">✓ Pass</div>
+</div>
+<div class="calc-panel">
+<div class="calc-row">
+<div class="calc-row-name">Max Stress</div>
+<div class="calc-row-val">19.0 ksi</div>
+<div class="calc-row-status pass">✓ Pass</div>
+</div>
+<div class="calc-row">
+<div class="calc-row-name">Max Deflection</div>
+<div class="calc-row-val">0.09 in</div>
+<div class="calc-row-status pass">✓ Pass</div>
+</div>
+<div class="calc-row">
+<div class="calc-row-name">Section Modulus</div>
+<div class="calc-row-val">0.288 in³</div>
+<div class="calc-row-status pass">✓ OK</div>
+</div>
+<div class="calc-row">
+<div class="calc-row-name">Support Spacing</div>
+<div class="calc-row-val">4.5 ft</div>
+<div class="calc-row-status pass">New</div>
+</div>
+</div>
+</div>
+
+<div class="prop-card">
+<div class="prop-hd">
+<div class="prop-hd-title">📐 Drawing · Surgical Update</div>
+<div class="prop-hd-badge">Rev C → Rev D</div>
+</div>
+<div class="drawing-panel">
+<div class="drawing-svg-frame">
+<svg viewBox="0 0 400 130" width="100%" height="100">
+<rect x="20" y="55" width="360" height="20" fill="#d4f5e7" stroke="#2eb87a" stroke-width="1.5"/>
+<g fill="#2eb87a">
+<rect x="50" y="45" width="8" height="40"/>
+<rect x="140" y="45" width="8" height="40"/>
+<rect x="230" y="45" width="8" height="40"/>
+<rect x="320" y="45" width="8" height="40"/>
+</g>
+<g stroke="#2eb87a" stroke-width="0.8" fill="#2eb87a" font-size="9" font-family="Arial" font-weight="700">
+<line x1="54" y1="105" x2="144" y2="105"/>
+<line x1="54" y1="100" x2="54" y2="110"/>
+<line x1="144" y1="100" x2="144" y2="110"/>
+<text x="80" y="120">4.5 ft</text>
+<line x1="144" y1="105" x2="234" y2="105"/>
+<line x1="234" y1="100" x2="234" y2="110"/>
+<text x="170" y="120">4.5 ft</text>
+<line x1="234" y1="105" x2="324" y2="105"/>
+<line x1="324" y1="100" x2="324" y2="110"/>
+<text x="260" y="120">4.5 ft</text>
+</g>
+</svg>
+</div>
+<div class="drawing-legend">
+<span>5 entities modified:</span>
+<strong>2 dims · 2 blocks · 1 note</strong>
+</div>
+</div>
+</div>
+</div>
+
+<div class="prop-summary reveal d4">
+<div class="prop-summary-label">What just happened — end-to-end</div>
+<div class="prop-summary-list">
+<div class="prop-summary-item">
+<div class="prop-summary-check">✓</div>
+<div class="prop-summary-item-title">Datasheet Rev D</div>
+<div class="prop-summary-item-sub">Parsed &amp; normalized · 12 params</div>
+</div>
+<div class="prop-summary-item">
+<div class="prop-summary-check">✓</div>
+<div class="prop-summary-item-title">Delta computed</div>
+<div class="prop-summary-item-sub">1 change · 1 impact flagged</div>
+</div>
+<div class="prop-summary-item">
+<div class="prop-summary-check">✓</div>
+<div class="prop-summary-item-title">Calcs updated</div>
+<div class="prop-summary-item-sub">Stress · deflection · modulus</div>
+</div>
+<div class="prop-summary-item">
+<div class="prop-summary-check">✓</div>
+<div class="prop-summary-item-title">Drawing updated</div>
+<div class="prop-summary-item-sub">Surgical · 5 entity changes</div>
+</div>
+</div>
+</div>
+```
+
+</section>
+
+</div>
+
+<!-- CLOSING -->
+
+<div class="closing">
+<div class="closing-eyebrow">The bigger picture</div>
+<h2 class="closing-title">Seven stages.<br><span class="green">One decision.</span></h2>
+<div class="closing-stats">
+<div class="closing-stat">
+<div class="closing-stat-num">1</div>
+<div class="closing-stat-label">Human decision</div>
+</div>
+<div class="closing-stat">
+<div class="closing-stat-num">0</div>
+<div class="closing-stat-label">Missed impacts</div>
+</div>
+<div class="closing-stat">
+<div class="closing-stat-num">5 min</div>
+<div class="closing-stat-label">PDF → updated drawing</div>
+</div>
+<div class="closing-stat">
+<div class="closing-stat-num">100%</div>
+<div class="closing-stat-label">Traceable to source</div>
+</div>
+</div>
+<p class="closing-text">
+This is what it looks like when engineering documents stop being <strong>the place the data lives</strong> and start being <span class="green">the output of a living system</span>. The Engineering Hub is that system — a structured data backbone that connects Fusion Live, calculations, LARA, and AutoCAD into one continuous flow.
+</p>
+</div>
+
+<script>
+const stages = document.querySelectorAll('.stage');
+const pipeNodes = document.querySelectorAll('.pipe-node');
+const pipeArrows = document.querySelectorAll('.pipe-arrow');
+
+// Reveal animations
+const revealObserver = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) entry.target.classList.add('show');
+});
+}, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Stage in-view
+const stageObserver = new IntersectionObserver((entries) => {
+entries.forEach(entry => {
+if (entry.isIntersecting) entry.target.classList.add('in-view');
+});
+}, { threshold: [0.3, 0.5, 0.7] });
+stages.forEach(s => stageObserver.observe(s));
+
+// Pipeline sync with scroll
+function updatePipeline() {
+const scrollY = window.scrollY;
+const viewportMid = scrollY + window.innerHeight * 0.4;
+let activeStage = 0;
+stages.forEach(stage => {
+const rect = stage.getBoundingClientRect();
+const absoluteTop = rect.top + scrollY;
+if (absoluteTop < viewportMid) {
+const pipeIndex = parseInt(stage.dataset.pipe);
+if (pipeIndex > activeStage) activeStage = pipeIndex;
+}
+});
+pipeNodes.forEach(node => {
+const stageIdx = parseInt(node.dataset.stage);
+node.classList.remove('active', 'done');
+if (stageIdx < activeStage) node.classList.add('done');
+else if (stageIdx === activeStage) node.classList.add('active');
+});
+pipeArrows.forEach(arrow => {
+const arrowIdx = parseInt(arrow.dataset.arrow);
+if (arrowIdx < activeStage) arrow.classList.add('lit');
+else arrow.classList.remove('lit');
+});
+}
+window.addEventListener('scroll', updatePipeline, { passive: true });
+window.addEventListener('resize', updatePipeline);
+updatePipeline();
+
+// Decision interaction
+let chosen = null;
+function pickOption(el, option) {
+document.querySelectorAll('.decision-option').forEach(o => o.classList.remove('selected'));
+el.classList.add('selected');
+chosen = option;
+const btn = document.getElementById('decisionBtn');
+btn.disabled = false;
+btn.textContent = option === 'A' ? 'Apply Option A & Propagate' : 'Apply Option B & Propagate';
+}
+function confirmDecision() {
+const btn = document.getElementById('decisionBtn');
+btn.textContent = '✓ Applied — Propagating…';
+btn.disabled = true;
+setTimeout(() => {
+document.getElementById('stage-7').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}, 600);
+}
+</script>
+
+</body>
+</html>
